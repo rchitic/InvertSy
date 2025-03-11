@@ -1327,6 +1327,11 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         i: int
             the iteration ID
         """
+
+        # Optionally stop path integration after double the outward path steps
+        #if i > 2 * self._route.shape[0]:
+        #    import sys
+        #    sys.exit()
         act = True
         omm_responses = None
         if i < self._route.shape[0]:  # outbound
@@ -1350,6 +1355,9 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
 
             self._foraging = True
         elif i == self._route.shape[0]:
+            home_vector = self.agent._cx.memory.cpu4_mem
+            np.save("D:\\InvertPy\\data\\home_vectors\\2.npy",home_vector)
+
             self.init_inbound()
             self._foraging = False
             # for process in self.agent.preprocessing:
@@ -1403,7 +1411,7 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         self._stats["SOL"].append(compass.r_sol.copy())
         self._stats["CL1"].append(cx.r_cl1.copy())
         self._stats["TB1"].append(cx.r_tb1.copy())
-        self._stats["CPU4"].append(cx.m_cpu4.copy())
+        self._stats["CPU4"].append(cx.r_cpu4.copy())
         self._stats["CPU1"].append(cx.r_cpu1.copy())
         self._stats["CPU4mem"].append(cx.r_cpu4.copy())
 
