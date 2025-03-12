@@ -31,6 +31,7 @@ import matplotlib.cm
 import numpy as np
 import sys
 import os
+import json
 
 __default_anim_dir__ = os.path.abspath(os.path.join(__root__, "data", "animation", "vids"))
 if not os.path.isdir(__default_anim_dir__):
@@ -902,7 +903,7 @@ class AnimationBase(object):
         # self.sim.reset()
         self._animate(0)
         self._ani = animation.FuncAnimation(self.fig, self.__animate, init_func=self.__initialise,
-                                            frames=self.nb_frames, interval=int(1000 / self._fps), blit=True)
+                                            frames=self.nb_frames, interval=int(1000 / self._fps), blit=True, repeat=False)
         try:
             if save:
                 if save_name is None:
@@ -912,7 +913,22 @@ class AnimationBase(object):
                 self.ani.save(filepath, fps=self._fps)
 
             if show:
-                plt.show()
+                plt.show(block=False)
+                #plt.draw()
+                plt.pause(80)
+
+                # Get name of the latest file in another folder
+                folder = "/home/p318679/Documents/InvertSy/data/attractor/attractor_angles"
+                files = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
+
+                if files:
+                    # Get the latest file based on modification time
+                    latest_file = max(files, key=lambda f: os.path.getmtime(os.path.join(folder, f)))
+                    new_file_name = latest_file.split(".npy")[0]
+                else:
+                    new_file_name = "1"
+                plt.savefig("/home/p318679/Documents/InvertSy/data/attractor/images/"+new_file_name+".png")
+                plt.close()
         except KeyboardInterrupt:
             lg.logger.error("Animation interrupted by keyboard!")
         finally:
@@ -2107,7 +2123,7 @@ class VisualFamiliarityAnimation(AnimationBase):
 
 class PathIntegrationAnimation(AnimationBase):
 
-    def __init__(self, sim, show_history=True, cmap="coolwarm", *args, **kwargs):
+    def __init__(self, N,J_E,J_I,weight_norm,state_norm, sim, show_history=True, cmap="coolwarm", *args, **kwargs):
         """
         Animation for the path integration simulation. Shows the POL neurons responses in the Dorsal Rim Area, the
         position and history of positions of the agent on the map (with vegetation if provided) and the responses of
@@ -2184,6 +2200,12 @@ class PathIntegrationAnimation(AnimationBase):
 
         omm.set_array(sim.r_pol)
         self._show_history = show_history
+
+        self.attractor_N = N
+        self.attractor_J_E = J_E
+        self.attractor_J_I = J_I
+        self.attractor_weight_norm = weight_norm
+        self.attractor_state_norm = state_norm
 
     def _animate(self, i):
         """

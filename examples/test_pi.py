@@ -2,9 +2,12 @@ from invertsy.env.world import Seville2009
 from invertsy.agent import PathIntegrationAgent
 from invertsy.sim.simulation import PathIntegrationSimulation
 from invertsy.sim.animation import PathIntegrationAnimation
+import json, os
+import numpy as np
+import random
+random.seed(0)
 
-
-def main(*args):
+def main(N,J_E,J_I,weight_norm,state_norm,*args):
     routes = Seville2009.load_routes(args[0], degrees=True)
     ant_no, rt_no, rt = routes['ant_no'][0], routes['route_no'][0], routes['path'][0]
     print("Ant#: %d, Route#: %d, steps#: %d" % (ant_no, rt_no, rt.shape[0]))
@@ -12,10 +15,10 @@ def main(*args):
     rt = rt[::-1]
     rt[:, 3] = (rt[:, 3] - 0) % 360 - 180
     # rt[:, 3] = (rt[:, 3] - 5) % 360 - 180
-    agent = PathIntegrationAgent()
+    agent = PathIntegrationAgent(N,J_E,J_I,weight_norm,state_norm)
     agent.step_size = .01
-    sim = PathIntegrationSimulation(rt, agent=agent, noise=0., name="pi-ant%d-route%d" % (ant_no, rt_no))
-    ani = PathIntegrationAnimation(sim, show_history=True)
+    sim = PathIntegrationSimulation(N,J_E,J_I,weight_norm,state_norm, rt, agent=agent, noise=0., name="pi-ant%d-route%d" % (ant_no, rt_no))
+    ani = PathIntegrationAnimation(N,J_E,J_I,weight_norm,state_norm, sim, show_history=True)
     ani(save=False, show=True, save_type="mp4", save_stats=False)
 
 
@@ -35,4 +38,50 @@ if __name__ == '__main__':
 
         p_args = parser.parse_args()
 
-        main(p_args.input)
+        valid_JE_JI = [(10, -6), (10, -7), (10, -8), (10, -9), (10, -10), (10, -11), (10, -12), (10, -13), (10, -14),
+                       (9, -5), (9, -6), (9, -7), (9, -8), (9, -9), (9, -10), (9, -11), (9, -12), (9, -13), (9, -14),
+                       (8, -5), (8, -6), (8, -7), (8, -8), (8, -9), (8, -10), (8, -11), (8, -12), (8, -13), (8, -14),
+                       (7, -4), (7, -5), (7, -6), (7, -7), (7, -8), (7, -9), (7, -10), (7, -11), (7, -12), (7, -13),
+                       (7, -14),
+                       (6, -3), (6, -4), (6, -5), (6, -6), (6, -7), (6, -8), (6, -9), (6, -10), (6, -11), (6, -12),
+                       (6, -13),
+                       (6, -14),
+                       (5, -2), (5, -3), (5, -4), (5, -5), (5, -6), (5, -7), (5, -8), (5, -9), (5, -10), (5, -11),
+                       (5, -12),
+                       (5, -13), (5, -14),
+                       (4, -1), (4, -2), (4, -3), (4, -4), (4, -5), (4, -6), (4, -7), (4, -8), (4, -9), (4, -10),
+                       (4, -11),
+                       (4, -12), (4, -13), (4, -14),
+                       (3, -1), (3, -2), (3, -3), (3, -4), (3, -5), (3, -6), (3, -7), (3, -8), (3, -9), (3, -10),
+                       (3, -11),
+                       (3, -12), (3, -13), (3, -14),
+                       ]
+        short_valid_JE_JI = [(10, -6), (10, -10), (10, -14),
+                       (9, -5), (9, -10), (9, -14),
+                       (8, -5), (8, -10), (8, -14),
+                       (7, -4), (7, -9), (7, -14),
+                       (6, -3), (6, -8), (6, -14),
+                       (5, -2), (5, -8), (5, -14),
+                       (4, -1),  (4, -7), (4, -14),
+                       (3, -1), (3, -7), (3, -14),
+                       ]
+        N_range = np.arange(6, 40, 2)
+        weight_norms = [0.01, 0.1, 0.5, 1, 3, 5, 10]
+        state_norms = [1,5,10,20,30,40,50,60,70,80,90,100]
+
+        for N in N_range:
+            for idx in range(len(short_valid_JE_JI)):
+                J_E, J_I = valid_JE_JI[idx]
+                for weight_norm in weight_norms:
+                    for state_norm in state_norms:
+                        values = [N,J_E,J_I,weight_norm,state_norm]
+                        values = np.array(values, dtype=np.float64)
+                        # Convert NumPy float64 to Python int
+                        values = values.tolist()
+                        print('Values',values)
+                        with open("/home/p318679/Documents/InvertPy/src/invertpy/brain/centralcomplex/attractor_dynamic_params.json", "w") as f:
+                            json.dump(values, f)
+                            f.flush()  # Force Python to write data
+                            os.fsync(f.fileno())
+                        np.random.seed(0)
+                        main(N,J_E,J_I,weight_norm,state_norm,p_args.input)

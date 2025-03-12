@@ -40,6 +40,8 @@ from time import time
 from copy import copy
 
 import os
+import sys
+import json
 
 __stat_dir__ = os.path.abspath(os.path.join(__data__, "animation", "stats"))
 __outb_dir__ = os.path.abspath(os.path.join(__data__, "animation", "outbounds"))
@@ -1197,7 +1199,7 @@ class CentralPointNavigationSimulationBase(NavigationSimulationBase, ABC):
 
 class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
 
-    def __init__(self, route, zero_vector=False, *args, **kwargs):
+    def __init__(self, N,J_E,J_I,weight_norm,state_norm, route, zero_vector=False, *args, **kwargs):
         """
         Runs the path integration task.
         An agent equipped with a compass and the central complex is forced to follow a route and then it is asked to
@@ -1224,7 +1226,7 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         """
         if len(args) == 0:
             kwargs.setdefault("xyz", route[0, :3])
-        kwargs.setdefault('nb_iterations', int(3.5 * route.shape[0]))
+        kwargs.setdefault('nb_iterations', int(3 * route.shape[0]))
         super().__init__(*args, **kwargs)
         self._route = route
 
@@ -1246,6 +1248,12 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
             self._beta = 0.0
 
         self.__file_data = None
+
+        self.attractor_N = N
+        self.attractor_J_E = J_E
+        self.attractor_J_I = J_I
+        self.attractor_weight_norm = weight_norm
+        self.attractor_state_norm = state_norm
 
     def reset(self, *args):
         """
@@ -1327,11 +1335,6 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         i: int
             the iteration ID
         """
-
-        # Optionally stop path integration after double the outward path steps
-        #if i > 2 * self._route.shape[0]:
-        #    import sys
-        #    sys.exit()
         act = True
         omm_responses = None
         if i < self._route.shape[0]:  # outbound
@@ -1355,8 +1358,11 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
 
             self._foraging = True
         elif i == self._route.shape[0]:
+            # Save memory state when reaching food
             home_vector = self.agent._cx.memory.cpu4_mem
-            np.save("D:\\InvertPy\\data\\home_vectors\\2.npy",home_vector)
+            attractor_angles = self.agent._cx.memory.attractor_angles
+            np.save("/home/p318679/Documents/InvertSy/data/attractor/home_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,int(self.attractor_J_E),int(self.attractor_J_I),self.attractor_weight_norm,int(self.attractor_state_norm)),home_vector)
+            np.save("/home/p318679/Documents/InvertSy/data/attractor/attractor_angles/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,int(self.attractor_J_E),int(self.attractor_J_I),self.attractor_weight_norm,int(self.attractor_state_norm)),attractor_angles)
 
             self.init_inbound()
             self._foraging = False
@@ -1378,6 +1384,10 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         #     motivation = np.array([0, 1])
         # else:
         #     motivation = np.array([1, 0])
+        elif i == 2 * self._route.shape[0] - 1:
+            # Save final location and stop path integration after double the outward path steps
+            current_agent_location = self._agent.xyz
+            np.save("/home/p318679/Documents/InvertSy/data/attractor/trip_end_locations/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,int(self.attractor_J_E),int(self.attractor_J_I),self.attractor_weight_norm,int(self.attractor_state_norm)),current_agent_location)
 
         if hasattr(self.agent, "mushroom_body"):
             self.agent.mushroom_body.update = self._foraging

@@ -829,7 +829,7 @@ class VisualProcessingAgent(Agent, ABC):
 
 
 class CentralComplexAgent(Agent, ABC):
-    def __init__(self, cx_class=StoneCX, cx_params=None, *args, **kwargs):
+    def __init__(self, N,J_E,J_I,weight_norm,state_norm, cx_class=StoneCX, cx_params=None, *args, **kwargs):
         Agent.__init__(self, *args, **kwargs)
 
         pol_sensor = PolarisationSensor(nb_input=60, field_of_view=56, degrees=True, noise=self._noise, rng=self.rng)
@@ -841,7 +841,7 @@ class CentralComplexAgent(Agent, ABC):
         cx_params.setdefault('noise', self._noise)
         cx_params.setdefault('rng', self.rng)
 
-        cx = cx_class(**cx_params)
+        cx = cx_class(N,J_E,J_I,weight_norm,state_norm,**cx_params)
 
         self.add_sensor(pol_sensor, local=True)
         self.add_brain_component(pol_compass)
@@ -853,6 +853,12 @@ class CentralComplexAgent(Agent, ABC):
         self._p_phi = None
 
         self._default_flow = self._dx * np.ones(2) / np.sqrt(2)
+
+        self.attractor_N = N
+        self.attractor_J_E = J_E
+        self.attractor_J_I = J_I
+        self.attractor_weight_norm = weight_norm
+        self.attractor_state_norm = state_norm
 
     def _sense(self, sky=None, scene=None, flow=None, **kwargs):
         """
