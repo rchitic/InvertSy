@@ -56,24 +56,28 @@ if __name__ == '__main__':
                        (3, -11),
                        (3, -12), (3, -13), (3, -14),
                        ]
-        short_valid_JE_JI = [(10, -6), (10, -10), (10, -14),
-                       (9, -5), (9, -10), (9, -14),
-                       (8, -5), (8, -10), (8, -14),
-                       (7, -4), (7, -9), (7, -14),
-                       (6, -3), (6, -8), (6, -14),
-                       (5, -2), (5, -8), (5, -14),
-                       (4, -1),  (4, -7), (4, -14),
-                       (3, -1), (3, -7), (3, -14),
+        short_valid_JE_JI = [(10, -9),
+                             (9, -8),
+                             (8, -7),
+                             (7, -6),
+                             (6, -5),
+                             (5, -4),
+                             (4, -3),
+                             (3, -2)
                        ]
         N_range = np.arange(6, 40, 2)
         weight_norms = [0.01, 0.1, 0.5, 1, 3, 5, 10]
         state_norms = [1,5,10,20,30,40,50,60,70,80,90,100]
 
+        # Reduce number of parameter combinations
+        short_weight_norms = [0.01, 1, 5, 10, 50]
+        short_state_norms = [1,5,10,50,100]
+
         for N in N_range:
             for idx in range(len(short_valid_JE_JI)):
-                J_E, J_I = valid_JE_JI[idx]
-                for weight_norm in weight_norms:
-                    for state_norm in state_norms:
+                J_E, J_I = short_valid_JE_JI[idx]
+                for weight_norm in short_weight_norms:
+                    for state_norm in short_state_norms:
                         values = [N,J_E,J_I,weight_norm,state_norm]
                         values = np.array(values, dtype=np.float64)
                         # Convert NumPy float64 to Python int
