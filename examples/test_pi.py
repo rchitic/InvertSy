@@ -65,17 +65,15 @@ if __name__ == '__main__':
                              (4, -3),
                              (3, -2)
                        ]
-        N_range = np.arange(6, 40, 2)
-        weight_norms = [0.01, 0.1, 0.5, 1, 3, 5, 10]
-        state_norms = [1,5,10,20,30,40,50,60,70,80,90,100]
+        N_range = np.arange(22, 40, 2)
 
-        # Reduce number of parameter combinations
-        short_weight_norms = [0.01, 1, 5, 10, 50]
-        short_state_norms = [1,5,10,50,100]
+        short_weight_norms = [0.05,0.1,0.15,0.2]
+        short_state_norms = [0.05,0.1,0.15,0.2]
+        short_JEs = 4 + np.array([-0.2,-0.15,-0.1,-0.05,0.05,0.1,0.15,0.2])
+        J_I = -2.4
 
         for N in N_range:
-            for idx in range(len(short_valid_JE_JI)):
-                J_E, J_I = short_valid_JE_JI[idx]
+            for J_E in short_JEs:
                 for weight_norm in short_weight_norms:
                     for state_norm in short_state_norms:
                         values = [N,J_E,J_I,weight_norm,state_norm]
@@ -83,9 +81,5 @@ if __name__ == '__main__':
                         # Convert NumPy float64 to Python int
                         values = values.tolist()
                         print('Values',values)
-                        with open("/home/p318679/Documents/InvertPy/src/invertpy/brain/centralcomplex/attractor_dynamic_params.json", "w") as f:
-                            json.dump(values, f)
-                            f.flush()  # Force Python to write data
-                            os.fsync(f.fileno())
                         np.random.seed(0)
                         main(N,J_E,J_I,weight_norm,state_norm,p_args.input)
