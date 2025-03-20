@@ -913,8 +913,8 @@ class CentralComplexAgent(Agent, ABC):
 
         # Save steerings
         filename = "/home/p318679/Documents/InvertSy/data/attractor/steering_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(
-            self.attractor_N, int(self.attractor_J_E), int(self.attractor_J_I), self.attractor_weight_norm,
-            int(self.attractor_state_norm))
+            self.attractor_N, self.attractor_J_E, self.attractor_J_I, self.attractor_weight_norm,
+            self.attractor_state_norm)
         if os.path.exists(filename):
             all_steerings = np.load(filename)
             all_steerings = np.append(all_steerings, steer)

@@ -915,7 +915,7 @@ class AnimationBase(object):
             if show:
                 plt.show(block=False)
                 #plt.draw()
-                plt.pause(80)
+                plt.pause(150)
 
                 # Get name of the latest file in another folder
                 folder = "/home/p318679/Documents/InvertSy/data/attractor/attractor_angles"

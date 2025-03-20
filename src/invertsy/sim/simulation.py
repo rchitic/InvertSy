@@ -1361,8 +1361,8 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
             # Save memory state when reaching food
             home_vector = self.agent._cx.memory.cpu4_mem
             attractor_angles = self.agent._cx.memory.attractor_angles
-            np.save("/home/p318679/Documents/InvertSy/data/attractor/home_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,int(self.attractor_J_E),int(self.attractor_J_I),self.attractor_weight_norm,int(self.attractor_state_norm)),home_vector)
-            np.save("/home/p318679/Documents/InvertSy/data/attractor/attractor_angles/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,int(self.attractor_J_E),int(self.attractor_J_I),self.attractor_weight_norm,int(self.attractor_state_norm)),attractor_angles)
+            np.save("/home/p318679/Documents/InvertSy/data/attractor/home_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),home_vector)
+            np.save("/home/p318679/Documents/InvertSy/data/attractor/attractor_angles/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),attractor_angles)
 
             self.init_inbound()
             self._foraging = False
@@ -1384,10 +1384,10 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         #     motivation = np.array([0, 1])
         # else:
         #     motivation = np.array([1, 0])
-        elif i == 2 * self._route.shape[0] - 1:
+        if i == 2 * self._route.shape[0] - 1:
             # Save final location and stop path integration after double the outward path steps
             current_agent_location = self._agent.xyz
-            np.save("/home/p318679/Documents/InvertSy/data/attractor/trip_end_locations/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,int(self.attractor_J_E),int(self.attractor_J_I),self.attractor_weight_norm,int(self.attractor_state_norm)),current_agent_location)
+            np.save("/home/p318679/Documents/InvertSy/data/attractor/trip_end_locations/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),current_agent_location)
 
         if hasattr(self.agent, "mushroom_body"):
             self.agent.mushroom_body.update = self._foraging
