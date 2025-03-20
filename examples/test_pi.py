@@ -65,11 +65,11 @@ if __name__ == '__main__':
                              (4, -3),
                              (3, -2)
                        ]
-        N_range = np.arange(22, 40, 2)
+        N_range = np.arange(6, 40, 2)
 
-        short_weight_norms = [0.05,0.1,0.15,0.2]
-        short_state_norms = [0.05,0.1,0.15,0.2]
-        short_JEs = 4 + np.array([-0.2,-0.15,-0.1,-0.05,0.05,0.1,0.15,0.2])
+        short_weight_norms = [0,0.05,0.1,0.15,0.2]
+        short_state_norms = [0,0.05,0.1,0.15,0.2]
+        short_JEs = 4 + np.array([-0.2,-0.15,-0.1,-0.05,0,0.05,0.1,0.15,0.2])
         J_I = -2.4
 
         for N in N_range:
