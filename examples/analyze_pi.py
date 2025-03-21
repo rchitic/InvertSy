@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from invertpy.brain.centralcomplex.attractor_static_params import *
 
 short_valid_JE_JI = [(10, -9),
                      (9, -8),
@@ -36,54 +37,66 @@ short_state_norms = [1, 5, 10, 50, 100]
 # angles = np.array(angles).reshape(3,len(short_valid_JE_JI),len(short_weight_norms),len(short_state_norms),len(angle))
 # trip_end_locations = np.array(trip_end_locations).reshape(3,len(short_valid_JE_JI),len(short_weight_norms),len(short_state_norms),len(trip_end_location))
 # print(angles.shape, home_vectors.shape, trip_end_locations.shape)
+
+N,J_E,J_I,WN,SN = 40,3.8,-2.4,0.1,0
+# att_home_vector=np.load("/home/p318679/Documents/InvertSy/data/attractor/home_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(N,J_E,J_I,WN,SN))
+# non_att_home_vector=np.load("/home/p318679/Documents/InvertSy/data/non_attractor/home_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(N,J_E,J_I,WN,SN))
+# plt.plot(att_home_vector)
+# plt.plot(non_att_home_vector)
+# plt.show()
 #
-# means = np.mean(home_vectors,axis=(1,2,3))
-# print(means.shape,means)
-#
-# print('h',np.sum(home_vectors[2,0,0,0][:8]),np.sum(home_vectors[2,0,0,0][8:]))
-# print('h',np.sum(home_vectors[2,0,2,0][:8]),np.sum(home_vectors[2,0,2,0][8:]))
-#
-# plt.plot(home_vectors[2,0,0,0])
-# plt.plot(home_vectors[2,0,2,0])
-# #plt.plot(angles[0,0,2,0])
+# att_steering_vector=np.load("/home/p318679/Documents/InvertSy/data/attractor/steering_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(N,J_E,J_I,WN,SN))
+# non_att_steering_vector=np.load("/home/p318679/Documents/InvertSy/data/non_attractor/steering_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(N,J_E,J_I,WN,SN))
+# plt.plot(att_steering_vector)
+# plt.plot(non_att_steering_vector)
 # plt.show()
 
-# baseline=np.load("/home/p318679/Documents/InvertSy/data/non_attractor/steering_vectors/N20_JE4_JI-2_WN0_SN0.npy")
-# #b=np.load("/home/p318679/Documents/InvertSy/data/attractor/steering_vectors/N6_JE10_JI-9_WN0.01_SN1.npy")
-# #c=np.load("/home/p318679/Documents/InvertSy/data/attractor/steering_vectors/N6_JE10_JI-9_WN0.01_SN5.npy")
-#
-# b=np.load("/home/p318679/Documents/InvertSy/data/attractor/steering_vectors/N20_JE4_JI-2_WN0_SN0.npy")
-#
-# plt.plot(baseline)
-# plt.plot(b,alpha=0.5)
-# #plt.plot(b,alpha=0.5)
-# #plt.plot(c,alpha=0.5)
-# plt.show()
+# att_mem=np.load("/home/p318679/Documents/InvertSy/data/attractor/__mem/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(N,J_E,J_I,WN,SN))
+# J_I=-2.4
+# non_att_mem=np.load("/home/p318679/Documents/InvertSy/data/non_attractor/__mem/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(N,J_E,J_I,WN,SN))
+# att_mem = att_mem.reshape(len(att_mem)//16,16)
+# non_att_mem = non_att_mem.reshape(len(non_att_mem)//16,16)
 
+#---------------------------------------------------------------------------------------------------------------------------------
+# ATTRACTOR ACTIVITY
+t=400
 
+att_activity=np.load("{}/InvertSy/data/attractor/attractor6_activity_with_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+non_att_activity=np.load("{}/InvertSy/data/attractor/attractor6_activity_without_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+print(att_activity.shape)
+print(non_att_activity.shape)
+att_activity = att_activity[:len(att_activity)//N*N].reshape(len(att_activity)//N,N)
+non_att_activity = non_att_activity[:len(non_att_activity)//N*N].reshape(len(non_att_activity)//N,N)
+plt.plot(non_att_activity[t])
+plt.plot(att_activity[t])
+plt.title(f'Attractor 6 activity at timestep {t}')
+plt.show()
 
-baseline=np.load("/home/p318679/Documents/InvertSy/data/attractor/home_vectors/N16_JE4_JI-2_WN0_SN0.npy")
-#b=np.load("/home/p318679/Documents/InvertSy/data/attractor/steering_vectors/N6_JE10_JI-9_WN0.01_SN1.npy")
-#c=np.load("/home/p318679/Documents/InvertSy/data/attractor/steering_vectors/N6_JE10_JI-9_WN0.01_SN5.npy")
+att_activity=np.load("{}/InvertSy/data/attractor/attractor3_activity_with_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+non_att_activity=np.load("{}/InvertSy/data/attractor/attractor3_activity_without_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+print(att_activity.shape)
+print(non_att_activity.shape)
+att_activity = att_activity[:len(att_activity)//N*N].reshape(len(att_activity)//N,N)
+non_att_activity = non_att_activity[:len(non_att_activity)//N*N].reshape(len(non_att_activity)//N,N)
+plt.plot(non_att_activity[t])
+plt.plot(att_activity[t])
+plt.title(f'Attractor 3 activity at timestep {t}')
+plt.show()
 
-b=np.load("/home/p318679/Documents/InvertSy/data/attractor/__mem/N16_JE4_JI-2_WN0_SN0.npy")
-print(b.shape)
-b=b.reshape(5684,16)
-#plt.plot(baseline)
-plt.plot(b[0],alpha=0.5)
-plt.plot(b[10],alpha=0.5)
-plt.plot(b[200],alpha=0.5)
+att_mem=np.load("{}/InvertSy/data/attractor/__mem/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+non_att_mem=np.load("{}/InvertSy/data/attractor/__mem_without_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+print(att_activity.shape)
+print(non_att_activity.shape)
+att_mem = att_mem[:len(att_mem)//16*16].reshape(len(att_mem)//16,16)
+non_att_mem = non_att_mem[:len(non_att_mem)//16*16].reshape(len(non_att_mem)//16,16)
+plt.plot(non_att_mem[t])
+plt.plot(att_mem[t])
+plt.title(f'CPU4 mem at timestep {t}')
+plt.show()
 
-#plt.plot(c,alpha=0.5)
-#plt.show()
-
-# b=np.load("/home/p318679/Documents/InvertSy/data/non_attractor/__mem/N16_JE4_JI-2_WN0_SN0.npy")
-# print(b.shape)
-# b=b.reshape(1805,16)
-# #plt.plot(baseline)
-# plt.plot(b[0],alpha=0.5)
-# plt.plot(b[10],alpha=0.5)
-# plt.plot(b[200],alpha=0.5)
-
-#plt.plot(c,alpha=0.5)
+att_angles=np.load("{}/InvertSy/data/attractor/attractor_angles/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+non_att_angles=np.load("{}/InvertSy/data/attractor/attractor_angles_without_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+plt.plot(non_att_angles)
+plt.plot(att_angles)
+plt.title('Attractor angles at food')
 plt.show()

@@ -14,6 +14,7 @@ __maintainer__ = "Evripidis Gkanias"
 import numbers
 from abc import ABC
 
+from invertpy.brain.centralcomplex.attractor_static_params import *
 from ._helpers import eps, RNG
 from ..__helpers import __data__
 
@@ -912,7 +913,7 @@ class CentralComplexAgent(Agent, ABC):
         steer = self.get_steering(self._cx) * 0.25  # to kill the noise a bit!
 
         # Save steerings
-        filename = "/home/p318679/Documents/InvertSy/data/attractor/steering_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(
+        filename = "{}/InvertSy/data/{}/steering_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,network_type,
             self.attractor_N, self.attractor_J_E, self.attractor_J_I, self.attractor_weight_norm,
             self.attractor_state_norm)
         if os.path.exists(filename):

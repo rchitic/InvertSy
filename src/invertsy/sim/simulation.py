@@ -14,6 +14,7 @@ __maintainer__ = "Evripidis Gkanias"
 from collections import namedtuple
 from abc import ABC
 
+from invertpy.brain.centralcomplex.attractor_static_params import network_type
 from ._helpers import col2x, row2y, yaw2ori, x2col, y2row, ori2yaw
 
 from invertsy.__helpers import __data__, RNG
@@ -42,6 +43,8 @@ from copy import copy
 import os
 import sys
 import json
+
+from invertpy.brain.centralcomplex.attractor_static_params import *
 
 __stat_dir__ = os.path.abspath(os.path.join(__data__, "animation", "stats"))
 __outb_dir__ = os.path.abspath(os.path.join(__data__, "animation", "outbounds"))
@@ -1361,8 +1364,10 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
             # Save memory state when reaching food
             home_vector = self.agent._cx.memory.cpu4_mem
             attractor_angles = self.agent._cx.memory.attractor_angles
-            np.save("/home/p318679/Documents/InvertSy/data/attractor/home_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),home_vector)
-            np.save("/home/p318679/Documents/InvertSy/data/attractor/attractor_angles/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),attractor_angles)
+            attractor_angles_without_drift = self.agent._cx.memory.attractor_angles_without_drift
+            np.save("{}/InvertSy/data/{}/home_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,network_type,self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),home_vector)
+            np.save("{}/InvertSy/data/{}/attractor_angles/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,network_type,self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),attractor_angles)
+            np.save("{}/InvertSy/data/{}/attractor_angles_without_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,network_type,self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),attractor_angles_without_drift)
 
             self.init_inbound()
             self._foraging = False
@@ -1387,7 +1392,7 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         if i == 2 * self._route.shape[0] - 1:
             # Save final location and stop path integration after double the outward path steps
             current_agent_location = self._agent.xyz
-            np.save("/home/p318679/Documents/InvertSy/data/attractor/trip_end_locations/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),current_agent_location)
+            np.save("{}/InvertSy/data/{}/trip_end_locations/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,network_type,self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),current_agent_location)
 
         if hasattr(self.agent, "mushroom_body"):
             self.agent.mushroom_body.update = self._foraging

@@ -77,9 +77,6 @@ if __name__ == '__main__':
                 for weight_norm in short_weight_norms:
                     for state_norm in short_state_norms:
                         values = [N,J_E,J_I,weight_norm,state_norm]
-                        values = np.array(values, dtype=np.float64)
-                        # Convert NumPy float64 to Python int
-                        values = values.tolist()
                         print('Values',values)
                         np.random.seed(0)
                         main(N,J_E,J_I,weight_norm,state_norm,p_args.input)

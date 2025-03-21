@@ -33,6 +33,8 @@ import sys
 import os
 import json
 
+from invertpy.brain.centralcomplex.attractor_static_params import *
+
 __default_anim_dir__ = os.path.abspath(os.path.join(__root__, "data", "animation", "vids"))
 if not os.path.isdir(__default_anim_dir__):
     os.makedirs(__default_anim_dir__)
@@ -915,10 +917,10 @@ class AnimationBase(object):
             if show:
                 plt.show(block=False)
                 #plt.draw()
-                plt.pause(150)
+                plt.pause(200)
 
                 # Get name of the latest file in another folder
-                folder = "/home/p318679/Documents/InvertSy/data/attractor/attractor_angles"
+                folder = "{}/InvertSy/data/{}/attractor_angles".format(home_loc,network_type)
                 files = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
 
                 if files:
@@ -927,7 +929,7 @@ class AnimationBase(object):
                     new_file_name = latest_file.split(".npy")[0]
                 else:
                     new_file_name = "1"
-                plt.savefig("/home/p318679/Documents/InvertSy/data/attractor/images/"+new_file_name+".png")
+                plt.savefig("{}/InvertSy/data/{}/images/".format(home_loc,network_type)+new_file_name+".png")
                 plt.close()
         except KeyboardInterrupt:
             lg.logger.error("Animation interrupted by keyboard!")
