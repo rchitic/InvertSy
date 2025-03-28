@@ -38,7 +38,7 @@ short_state_norms = [1, 5, 10, 50, 100]
 # trip_end_locations = np.array(trip_end_locations).reshape(3,len(short_valid_JE_JI),len(short_weight_norms),len(short_state_norms),len(trip_end_location))
 # print(angles.shape, home_vectors.shape, trip_end_locations.shape)
 
-N,J_E,J_I,WN,SN = 40,3.8,-2.4,0.1,0
+N,J_E,J_I,WN,SN = 6,6,-0.3999999999999999,2,2
 # att_home_vector=np.load("/home/p318679/Documents/InvertSy/data/attractor/home_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(N,J_E,J_I,WN,SN))
 # non_att_home_vector=np.load("/home/p318679/Documents/InvertSy/data/non_attractor/home_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(N,J_E,J_I,WN,SN))
 # plt.plot(att_home_vector)
@@ -59,10 +59,10 @@ N,J_E,J_I,WN,SN = 40,3.8,-2.4,0.1,0
 
 #---------------------------------------------------------------------------------------------------------------------------------
 # ATTRACTOR ACTIVITY
-t=400
+t=800
 
-att_activity=np.load("{}/InvertSy/data/attractor/attractor6_activity_with_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
-non_att_activity=np.load("{}/InvertSy/data/attractor/attractor6_activity_without_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+att_activity=np.load("{}\\InvertSy\\data\\attractor\\attractor6_activity_with_drift\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+non_att_activity=np.load("{}\\InvertSy\\data\\attractor\\attractor6_activity_without_drift\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
 print(att_activity.shape)
 print(non_att_activity.shape)
 att_activity = att_activity[:len(att_activity)//N*N].reshape(len(att_activity)//N,N)
@@ -72,8 +72,8 @@ plt.plot(att_activity[t])
 plt.title(f'Attractor 6 activity at timestep {t}')
 plt.show()
 
-att_activity=np.load("{}/InvertSy/data/attractor/attractor3_activity_with_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
-non_att_activity=np.load("{}/InvertSy/data/attractor/attractor3_activity_without_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+att_activity=np.load("{}\\InvertSy\\data\\attractor\\attractor3_activity_with_drift\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+non_att_activity=np.load("{}\\InvertSy\\data\\attractor\\attractor3_activity_without_drift\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
 print(att_activity.shape)
 print(non_att_activity.shape)
 att_activity = att_activity[:len(att_activity)//N*N].reshape(len(att_activity)//N,N)
@@ -83,20 +83,64 @@ plt.plot(att_activity[t])
 plt.title(f'Attractor 3 activity at timestep {t}')
 plt.show()
 
-att_mem=np.load("{}/InvertSy/data/attractor/__mem/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
-non_att_mem=np.load("{}/InvertSy/data/attractor/__mem_without_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+att_activity=np.load("{}\\InvertSy\\data\\attractor\\attractor1_activity_with_drift\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+non_att_activity=np.load("{}\\InvertSy\\data\\attractor\\attractor1_activity_without_drift\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
 print(att_activity.shape)
 print(non_att_activity.shape)
-att_mem = att_mem[:len(att_mem)//16*16].reshape(len(att_mem)//16,16)
-non_att_mem = non_att_mem[:len(non_att_mem)//16*16].reshape(len(non_att_mem)//16,16)
+att_activity = att_activity[:len(att_activity)//N*N].reshape(len(att_activity)//N,N)
+non_att_activity = non_att_activity[:len(non_att_activity)//N*N].reshape(len(non_att_activity)//N,N)
+plt.plot(non_att_activity[t])
+plt.plot(att_activity[t])
+plt.title(f'Attractor 1 activity at timestep {t}')
+plt.show()
+
+att_mem=np.load("{}\\InvertSy\\data\\attractor\\__mem\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+non_att_mem=np.load("{}\\InvertSy\\data\\attractor\\__mem_without_drift\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+print(att_activity.shape)
+print(non_att_activity.shape)
+att_mem = att_mem[:len(att_mem) // 16 * 16].reshape(len(att_mem) // 16, 16)
+non_att_mem = non_att_mem[:len(non_att_mem) // 16 * 16].reshape(len(non_att_mem) // 16, 16)
+
+t=500
 plt.plot(non_att_mem[t])
 plt.plot(att_mem[t])
+
+t=800
+plt.plot(non_att_mem[t])
+plt.plot(att_mem[t])
+
+t=900
+plt.plot(non_att_mem[t])
+plt.plot(att_mem[t])
+
 plt.title(f'CPU4 mem at timestep {t}')
 plt.show()
 
-att_angles=np.load("{}/InvertSy/data/attractor/attractor_angles/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
-non_att_angles=np.load("{}/InvertSy/data/attractor/attractor_angles_without_drift/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
-plt.plot(non_att_angles)
-plt.plot(att_angles)
+att_angles=np.load("{}\\InvertSy\\data\\attractor\\attractor_angles\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+non_att_angles=np.load("{}\\InvertSy\\data\\attractor\\attractor_angles_without_drift\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+att_angles = att_angles[:len(att_angles) // 16 * 16].reshape(len(att_angles) // 16, 16)
+non_att_angles = non_att_angles[:len(non_att_angles) // 16 * 16].reshape(len(non_att_angles) // 16, 16)
+plt.plot(non_att_angles[10])
+plt.plot(att_angles[10])
+
+plt.plot(non_att_angles[30])
+plt.plot(att_angles[30])
+
+plt.plot(non_att_angles[50])
+plt.plot(att_angles[50])
+#
+# plt.plot(non_att_angles[800])
+# plt.plot(att_angles[800])
+
+# plt.plot(non_att_angles[900])
+# plt.plot(att_angles[900])
+
 plt.title('Attractor angles at food')
+plt.show()
+
+att_angles=np.load("{}\\InvertSy\\data\\attractor\\steering_vectors\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+#non_att_angles=np.load("{}\\InvertSy\\data\\attractor\\attractor_angles_without_drift\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,N,J_E,J_I,WN,SN))
+#plt.plot(non_att_angles)
+plt.plot(att_angles)
+plt.title('Steering vector')
 plt.show()

@@ -911,9 +911,12 @@ class CentralComplexAgent(Agent, ABC):
         Uses the output of the central complex to compute the next movement and moves the agent to its new position.
         """
         steer = self.get_steering(self._cx) * 0.25  # to kill the noise a bit!
-
+        # if steer>0:
+        #     steer = 0.005
+        # elif steer<0:
+        #     steer = -0.005
         # Save steerings
-        filename = "{}/InvertSy/data/{}/steering_vectors/N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,network_type,
+        filename = "{}\\InvertSy\\data\\{}\\steering_vectors\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,network_type,
             self.attractor_N, self.attractor_J_E, self.attractor_J_I, self.attractor_weight_norm,
             self.attractor_state_norm)
         if os.path.exists(filename):

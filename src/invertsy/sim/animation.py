@@ -920,7 +920,7 @@ class AnimationBase(object):
                 plt.pause(200)
 
                 # Get name of the latest file in another folder
-                folder = "{}/InvertSy/data/{}/attractor_angles".format(home_loc,network_type)
+                folder = "{}\\InvertSy\\data\\{}\\attractor_angles".format(home_loc,network_type)
                 files = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
 
                 if files:
@@ -929,7 +929,7 @@ class AnimationBase(object):
                     new_file_name = latest_file.split(".npy")[0]
                 else:
                     new_file_name = "1"
-                plt.savefig("{}/InvertSy/data/{}/images/".format(home_loc,network_type)+new_file_name+".png")
+                plt.savefig("{}\\InvertSy\\data\\{}\\images\\".format(home_loc,network_type)+new_file_name+".png")
                 plt.close()
         except KeyboardInterrupt:
             lg.logger.error("Animation interrupted by keyboard!")

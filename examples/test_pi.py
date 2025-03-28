@@ -56,27 +56,20 @@ if __name__ == '__main__':
                        (3, -11),
                        (3, -12), (3, -13), (3, -14),
                        ]
-        short_valid_JE_JI = [(10, -9),
-                             (9, -8),
-                             (8, -7),
-                             (7, -6),
-                             (6, -5),
-                             (5, -4),
-                             (4, -3),
-                             (3, -2)
-                       ]
-        N_range = np.arange(6, 40, 2)
 
-        short_weight_norms = [0,0.05,0.1,0.15,0.2]
-        short_state_norms = [0,0.05,0.1,0.15,0.2]
-        short_JEs = 4 + np.array([-0.2,-0.15,-0.1,-0.05,0,0.05,0.1,0.15,0.2])
-        J_I = -2.4
+        N_range = np.arange(6, 32, 2)
+
+        short_weight_norms = [0,0.1,1,5,10]
+        short_state_norms = [0,0.1,1,5,10]
+        short_JEs = 4 + np.array([-10,-5,-1,-0.1,0,0.1,1,5,10]) / 100 * 4
+        short_JIs = -2.4 + np.array([-10,-5,-1,-0.1,0,0.1,1,5,10]) / 100 * 2.4
 
         for N in N_range:
             for J_E in short_JEs:
-                for weight_norm in short_weight_norms:
-                    for state_norm in short_state_norms:
-                        values = [N,J_E,J_I,weight_norm,state_norm]
-                        print('Values',values)
-                        np.random.seed(0)
-                        main(N,J_E,J_I,weight_norm,state_norm,p_args.input)
+                for J_I in short_JIs:
+                    for weight_norm in short_weight_norms:
+                        for state_norm in short_state_norms:
+                            values = [N,J_E,J_I,weight_norm,state_norm]
+                            print('Values',values)
+                            np.random.seed(0)
+                            main(N,J_E,J_I,weight_norm,state_norm,p_args.input)
