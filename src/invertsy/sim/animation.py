@@ -905,7 +905,7 @@ class AnimationBase(object):
         # self.sim.reset()
         self._animate(0)
         self._ani = animation.FuncAnimation(self.fig, self.__animate, init_func=self.__initialise,
-                                            frames=self.nb_frames, interval=int(1000 / self._fps), blit=True, repeat=False)
+                                            frames=self.nb_frames, interval=int(1000 / self._fps), blit=True)
         try:
             if save:
                 if save_name is None:
@@ -917,7 +917,7 @@ class AnimationBase(object):
             if show:
                 plt.show(block=False)
                 #plt.draw()
-                plt.pause(200)
+                plt.pause(400)
 
                 # Get name of the latest file in another folder
                 folder = "{}\\InvertSy\\data\\{}\\attractor_angles".format(home_loc,network_type)
@@ -931,6 +931,9 @@ class AnimationBase(object):
                     new_file_name = "1"
                 plt.savefig("{}\\InvertSy\\data\\{}\\images\\".format(home_loc,network_type)+new_file_name+".png")
                 plt.close()
+            else:
+                for i in range(self.nb_frames):
+                    self.__animate(i)
         except KeyboardInterrupt:
             lg.logger.error("Animation interrupted by keyboard!")
         finally:

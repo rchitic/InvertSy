@@ -15,11 +15,12 @@ def main(N,J_E,J_I,weight_norm,state_norm,*args):
     rt = rt[::-1]
     rt[:, 3] = (rt[:, 3] - 0) % 360 - 180
     # rt[:, 3] = (rt[:, 3] - 5) % 360 - 180
+    rt = rt[:100]
     agent = PathIntegrationAgent(N,J_E,J_I,weight_norm,state_norm)
     agent.step_size = .01
     sim = PathIntegrationSimulation(N,J_E,J_I,weight_norm,state_norm, rt, agent=agent, noise=0., name="pi-ant%d-route%d" % (ant_no, rt_no))
     ani = PathIntegrationAnimation(N,J_E,J_I,weight_norm,state_norm, sim, show_history=True)
-    ani(save=False, show=True, save_type="mp4", save_stats=False)
+    ani(save=False, show=False, save_type="mp4", save_stats=False)
 
 
 if __name__ == '__main__':
@@ -57,12 +58,12 @@ if __name__ == '__main__':
                        (3, -12), (3, -13), (3, -14),
                        ]
 
-        N_range = np.arange(6, 32, 2)
+        N_range = np.arange(6, 12, 2)
 
-        short_weight_norms = [0,0.1,1,5,10]
-        short_state_norms = [0,0.1,1,5,10]
-        short_JEs = 4 + np.array([-10,-5,-1,-0.1,0,0.1,1,5,10]) / 100 * 4
-        short_JIs = -2.4 + np.array([-10,-5,-1,-0.1,0,0.1,1,5,10]) / 100 * 2.4
+        short_weight_norms = [0,1,2,3,4,5]
+        short_state_norms = [0,1,2,3,4,5]
+        short_JEs = 4 + np.array([-5,-4,-3,-2,-1,0,1,2,3,4,5]) / 100 * 4
+        short_JIs = -2.4 + np.array([-5,-4,-3,-2,-1,0,1,2,3,4,5]) / 100 * 2.4
 
         for N in N_range:
             for J_E in short_JEs:

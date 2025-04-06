@@ -1229,7 +1229,7 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         """
         if len(args) == 0:
             kwargs.setdefault("xyz", route[0, :3])
-        kwargs.setdefault('nb_iterations', int(3 * route.shape[0]))
+        kwargs.setdefault('nb_iterations', int(1.1 * route.shape[0]))
         super().__init__(*args, **kwargs)
         self._route = route
 
@@ -1340,6 +1340,22 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         """
         act = True
         omm_responses = None
+
+        # Save agent location
+        current_agent_location = self._agent.xyz
+        filename = "{}\\InvertSy\\data\\{}\\agent_locations\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(
+            home_loc, network_type,
+            self.attractor_N,
+            round(self.attractor_J_E, 2), round(self.attractor_J_I, 2), round(self.attractor_weight_norm, 2),
+            round(self.attractor_state_norm, 2)
+        )
+        if os.path.exists(filename):
+            all = np.load(filename)
+            all = np.append(all, current_agent_location)
+        else:
+            all = current_agent_location
+        np.save(filename, all)
+
         if i < self._route.shape[0]:  # outbound
             x, y, z, yaw = self._route[i]
             self._agent.xyz = [x, y, z]
@@ -1363,7 +1379,7 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         elif i == self._route.shape[0]:
             # Save memory state when reaching food
             home_vector = self.agent._cx.memory.cpu4_mem
-            np.save("{}\\InvertSy\\data\\{}\\home_vectors\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,network_type,self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),home_vector)
+            np.save("{}\\InvertSy\\data\\{}\\home_vectors\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,network_type,self.attractor_N,round(self.attractor_J_E,2),round(self.attractor_J_I,2),round(self.attractor_weight_norm,2),round(self.attractor_state_norm,2)),home_vector)
 
             self.init_inbound()
             self._foraging = False
@@ -1385,10 +1401,6 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         #     motivation = np.array([0, 1])
         # else:
         #     motivation = np.array([1, 0])
-        if i == 2 * self._route.shape[0] - 1:
-            # Save final location and stop path integration after double the outward path steps
-            current_agent_location = self._agent.xyz
-            np.save("{}\\InvertSy\\data\\{}\\trip_end_locations\\N{}_JE{}_JI{}_WN{}_SN{}.npy".format(home_loc,network_type,self.attractor_N,self.attractor_J_E,self.attractor_J_I,self.attractor_weight_norm,self.attractor_state_norm),current_agent_location)
 
         if hasattr(self.agent, "mushroom_body"):
             self.agent.mushroom_body.update = self._foraging
