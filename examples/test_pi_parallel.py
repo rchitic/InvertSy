@@ -4,6 +4,7 @@ from invertsy.sim.simulation import PathIntegrationSimulation
 from invertsy.sim.animation import PathIntegrationAnimation
 import numpy as np
 import random
+from joblib import Parallel, delayed
 random.seed(0)
 
 def main(N,J_E,J_I,weight_norm,state_norm,*args):
@@ -61,15 +62,13 @@ if __name__ == '__main__':
 
         short_weight_norms = [0,1,2,3,4,5]
         short_state_norms = [0,1,2,3,4,5]
+        norms = [(wn,sn) for wn in short_weight_norms for sn in short_state_norms]
         short_JEs = 4 + np.array([-5,-4,-3,-2,-1,0,1,2,3,4,5]) / 100 * 4
         short_JIs = -2.4 + np.array([-5,-4,-3,-2,-1,0,1,2,3,4,5]) / 100 * 2.4
 
         for N in N_range:
             for J_E in short_JEs:
                 for J_I in short_JIs:
-                    for weight_norm in short_weight_norms:
-                        for state_norm in short_state_norms:
-                            values = [N,J_E,J_I,weight_norm,state_norm]
-                            print('Values',values)
+                            print(N,J_E,J_I)
                             np.random.seed(0)
-                            main(N,J_E,J_I,weight_norm,state_norm,p_args.input)
+                            Parallel(n_jobs=-1)(delayed(main)(N,J_E,J_I,weight_norm,state_norm,p_args.input) for weight_norm, state_norm in norms)
