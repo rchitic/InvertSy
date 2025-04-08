@@ -60,11 +60,11 @@ if __name__ == '__main__':
 
         N_range = np.arange(6, 12, 2)
 
-        short_weight_norms = [0,1,2,3,4,5]
-        short_state_norms = [0,1,2,3,4,5]
+        short_weight_norms = [1,3,5,10]
+        short_state_norms = [1,3,5,10]
         norms = [(wn,sn) for wn in short_weight_norms for sn in short_state_norms]
-        short_JEs = 4 + np.array([-5,-4,-3,-2,-1,0,1,2,3,4,5]) / 100 * 4
-        short_JIs = -2.4 + np.array([-5,-4,-3,-2,-1,0,1,2,3,4,5]) / 100 * 2.4
+        short_JEs = 4 + np.array([-10,-5,-3,-1,1,3,5,10]) / 100 * 4
+        short_JIs = -2.4 + np.array([-10,-5,-3,-1,1,3,5,10]) / 100 * 2.4
 
         for N in N_range:
             for J_E in short_JEs:

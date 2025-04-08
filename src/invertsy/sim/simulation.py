@@ -1229,7 +1229,7 @@ class PathIntegrationSimulation(CentralPointNavigationSimulationBase):
         """
         if len(args) == 0:
             kwargs.setdefault("xyz", route[0, :3])
-        kwargs.setdefault('nb_iterations', int(1.1 * route.shape[0]))
+        kwargs.setdefault('nb_iterations', int(3 * route.shape[0]))
         super().__init__(*args, **kwargs)
         self._route = route
 
